@@ -17,17 +17,6 @@
 <!-- כפתור התנתקות  -->
 <a href="/Logout" class="next-question-btn" style="position: fixed; top: 20px; left: 20px; text-decoration: none;">🚪 התנתקות</a>
 
-<!-- כפתור GitHub Star -->
-<div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000;">
-    <a href="https://github.com/yanivbahalul/WinterNET" target="_blank"
-       title="דרג את הפרויקט שלי"
-       style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
-              width: 50px; height: 50px; border-radius: 50%; background-color: var(--rojo);
-              color: white; font-size: 28px; font-weight: bold; box-shadow: 0 0 10px rgba(223, 45, 47, 0.8);">
-        ⭐
-    </a>
-</div>
-
 <!-- כפתור טבלת מובילים + ניהול -->
 <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; flex-wrap: wrap;">
     <a href="/Leaderboard" class="next-question-btn">🏆 מובילים</a>
@@ -127,10 +116,7 @@
             <button type="submit" class="next-question-btn" style="font-size: 20px; padding: 12px 32px;">דווח על טעות בשאלה</button>
         </form>
     </div>
-</div>
-
-<!-- סטטיסטיקה תחתונה -->
-<div id="stats-toggle" onclick="toggleStats()">⬆️</div>
+    </div>
 
 <div id="stats-panel" class="hidden">
     <h3>📊 סטטיסטיקה אישית</h3>
@@ -172,13 +158,9 @@ async function fetchOnlineCount() {
 
 function toggleStats() {
     const panel = document.getElementById('stats-panel');
-    const toggle = document.getElementById('stats-toggle');
     const footerToggle = document.getElementById('footer-stats-toggle');
     const isOpen = !panel.classList.contains('hidden');
     panel.classList.toggle('hidden');
-    if (toggle) {
-        toggle.innerText = isOpen ? '⬆️' : '⬇️';
-    }
     if (footerToggle) {
         footerToggle.style.opacity = isOpen ? '0.7' : '1';
     }
