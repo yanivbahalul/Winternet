@@ -36,7 +36,9 @@ body {
     background: var(--licorice);
     color: var(--rojo);
     overflow: auto;
-    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 body::before {
@@ -491,6 +493,68 @@ button.answer-btn:hover img {
     font-weight: bold;
     text-align: center;
     text-shadow: 0 0 10px var(--rojo);
+}
+
+/* Containers - ensure they expand to push footer down */
+.exams-container,
+.login-container,
+.cheater-container,
+.quiz-container {
+    flex: 1;
+}
+
+/* Footer Styles */
+.site-footer {
+    position: relative;
+    width: 100%;
+    background-color: rgba(11, 0, 20, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
+    margin-top: auto;
+    border-top: 2px solid var(--bittersweet-shimmer);
+    direction: rtl;
+    text-align: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    box-shadow: 0 -2px 20px rgba(193, 73, 83, 0.3);
+}
+
+.site-footer p {
+    margin: 0 auto;
+    font-size: 14px;
+    color: var(--isabelline);
+    line-height: 1.5;
+    text-align: center;
+    display: inline-block;
+    width: auto;
+    font-family: 'Miriam Libre', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.site-footer a {
+    color: var(--rojo);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.3s ease;
+    font-weight: bold;
+}
+
+.site-footer a:hover {
+    color: var(--bittersweet-shimmer);
+    text-shadow: 0 0 10px var(--bittersweet-shimmer);
+}
+
+.site-footer svg {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.site-footer a:hover svg {
+    transform: scale(1.2);
 }
 
 
