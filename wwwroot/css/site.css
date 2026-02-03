@@ -39,6 +39,12 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+/* Main content area - don't stretch, just take natural height */
+body > *:not(.site-footer):not(.background-gif) {
+    flex: 0 0 auto;
 }
 
 body::before {
@@ -507,19 +513,41 @@ button.answer-btn:hover img {
 .site-footer {
     position: relative;
     width: 100%;
+    max-width: 100%;
     background-color: rgba(11, 0, 20, 0.95);
     backdrop-filter: blur(10px);
     padding: 12px 20px;
-    margin-top: 40px;
+    margin-top: auto;
     border-top: 2px solid var(--bittersweet-shimmer);
     direction: rtl;
     text-align: center;
     box-sizing: border-box;
     flex-shrink: 0;
+    overflow: hidden;
     box-shadow: 0 -2px 20px rgba(193, 73, 83, 0.3);
 }
 
-.site-footer p {
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.footer-text {
+    margin: 0;
+    font-size: 14px;
+    color: var(--isabelline);
+    line-height: 1.5;
+    text-align: center;
+    display: inline-block;
+    font-family: 'Miriam Libre', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Support for old footer format (just <p>) */
+.site-footer > p {
     margin: 0 auto;
     font-size: 14px;
     color: var(--isabelline);
@@ -530,8 +558,11 @@ button.answer-btn:hover img {
     font-family: 'Miriam Libre', 'Helvetica Neue', Arial, sans-serif;
 }
 
-.site-footer a {
-    color: var(--rojo);
+/* Links in footer - ensure they're styled correctly */
+.site-footer a,
+.site-footer > p a,
+.footer-text a {
+    color: var(--rojo) !important;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -540,21 +571,62 @@ button.answer-btn:hover img {
     font-weight: bold;
 }
 
-.site-footer a:hover {
-    color: var(--bittersweet-shimmer);
+.site-footer a:hover,
+.site-footer > p a:hover,
+.footer-text a:hover {
+    color: var(--bittersweet-shimmer) !important;
     text-shadow: 0 0 10px var(--bittersweet-shimmer);
 }
 
-.site-footer svg {
+.site-footer a:visited,
+.site-footer > p a:visited,
+.footer-text a:visited {
+    color: var(--rojo) !important;
+}
+
+.footer-icons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-icon {
+    color: var(--rojo);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.footer-icon:hover {
+    color: var(--bittersweet-shimmer);
+    background-color: rgba(193, 73, 83, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(193, 73, 83, 0.3);
+}
+
+.footer-icon svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/* SVG icons in footer */
+.footer-text svg,
+.site-footer > p svg {
     width: 16px;
     height: 16px;
     vertical-align: middle;
     display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.site-footer a:hover svg {
-    transform: scale(1.2);
 }
 
 
