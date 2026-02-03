@@ -510,7 +510,7 @@ button.answer-btn:hover img {
     background-color: rgba(11, 0, 20, 0.95);
     backdrop-filter: blur(10px);
     padding: 12px 20px;
-    margin-top: auto;
+    margin-top: 40px;
     border-top: 2px solid var(--bittersweet-shimmer);
     direction: rtl;
     text-align: center;
