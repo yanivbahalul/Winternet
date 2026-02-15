@@ -208,7 +208,7 @@ namespace HelloWorldWeb.Pages
 
             int cheaterCount = HttpContext.Session.GetInt32("CheaterCount") ?? 0;
 
-            if (rapidTotal >= 10 || rapidCorrect >= 8)
+            if (rapidTotal >= 20 || rapidCorrect >= 16)
             {
                 user.CorrectAnswers = 0;
                 user.TotalAnswered = 0;
