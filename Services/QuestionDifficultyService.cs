@@ -347,28 +347,49 @@ namespace HelloWorldWeb.Services
             }
         }
 
-        public async Task<List<QuestionDifficulty>> GetAllQuestions(int limit = 1000)
+        /// <summary>
+        /// Loads all questions from question_difficulties with pagination (Supabase/PostgREST often cap at 1000 per request).
+        /// </summary>
+        public async Task<List<QuestionDifficulty>> GetAllQuestions(int maxRows = 10000)
         {
+            var all = new List<QuestionDifficulty>();
+            const int pageSize = 1100;
+            int offset = 0;
+            bool hasMore = true;
+
             try
             {
-                var res = await _client.GetAsync(
-                    $"{_url}/rest/v1/question_difficulties?select=*&order=LastUpdated.desc&limit={limit}"
-                );
-                
-                if (!res.IsSuccessStatusCode)
+                while (hasMore && all.Count < maxRows)
                 {
-                    return new List<QuestionDifficulty>();
+                    var url = $"{_url}/rest/v1/question_difficulties?select=*&order=LastUpdated.desc&limit={pageSize}&offset={offset}";
+                    var res = await _client.GetAsync(url);
+
+                    if (!res.IsSuccessStatusCode)
+                        break;
+
+                    var json = await res.Content.ReadAsStringAsync();
+                    var page = JsonSerializer.Deserialize<List<QuestionDifficulty>>(json, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    }) ?? new List<QuestionDifficulty>();
+
+                    foreach (var q in page)
+                    {
+                        if (!string.IsNullOrWhiteSpace(q.QuestionFile))
+                            all.Add(q);
+                    }
+
+                    if (page.Count < pageSize)
+                        hasMore = false;
+                    else
+                        offset += pageSize;
                 }
 
-                var json = await res.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<QuestionDifficulty>>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                }) ?? new List<QuestionDifficulty>();
+                return all;
             }
             catch (Exception)
             {
-                return new List<QuestionDifficulty>();
+                return all;
             }
         }
 

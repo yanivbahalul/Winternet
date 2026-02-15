@@ -395,7 +395,7 @@ function filterByDifficulty(difficulty) {
                     </tr>
                 </thead>
                 <tbody id="difficulty-questions-tbody">
-                    @foreach (var q in Model.DifficultyQuestions.Take(500))
+                    @foreach (var q in Model.DifficultyQuestions)
                     {
                         var diffColor = q.Difficulty switch
                         {
@@ -413,7 +413,7 @@ function filterByDifficulty(difficulty) {
                             "unrated" => "לא מדורג ⚪",
                             _ => q.Difficulty
                         };
-                        
+                        var lastUpdatedStr = q.LastUpdated != default ? q.LastUpdated.ToLocalTime().ToString("dd/MM HH:mm") : "—";
                         <tr class="difficulty-row" data-difficulty="@q.Difficulty" style="border-bottom: 1px solid #333;">
                             <td style="text-align: right; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                 <span style="display: inline-flex; align-items: center; gap: 8px;">
@@ -436,7 +436,7 @@ function filterByDifficulty(difficulty) {
                             <td style="font-weight: bold;">@q.SuccessRate.ToString("F1")%</td>
                             <td>@q.TotalAttempts</td>
                             <td>@q.CorrectAttempts</td>
-                            <td style="font-size: 11px; color: #999;">@q.LastUpdated.ToLocalTime().ToString("dd/MM HH:mm")</td>
+                            <td style="font-size: 11px; color: #999;">@lastUpdatedStr</td>
                         </tr>
                     }
                 </tbody>
@@ -444,7 +444,7 @@ function filterByDifficulty(difficulty) {
         </div>
         
         <p id="difficulty-count" style="text-align: center; color: #999; margin-top: 10px;">
-            מציג את כל @Model.DifficultyQuestions.Count השאלות
+            סה״כ @Model.DifficultyQuestions.Count שאלות (כולל לא מדורגות)
         </p>
     }
     else
