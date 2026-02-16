@@ -237,6 +237,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Long-press zoom on answer images
+    const answerImages = document.querySelectorAll('.answer-btn img');
+    answerImages.forEach(function (img) {
+        let pressTimer = null;
+
+        function startPress() {
+            // זום רק אחרי לחיצה ארוכה (חצי שנייה)
+            if (pressTimer !== null) return;
+            pressTimer = setTimeout(function () {
+                img.classList.add('answer-zoomed');
+            }, 500); // זמן לחיצה ארוכה לפני זום (במילישניות)
+        }
+
+        function endPress() {
+            if (pressTimer !== null) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+            img.classList.remove('answer-zoomed');
+        }
+
+        img.addEventListener('mousedown', startPress);
+        img.addEventListener('mouseup', endPress);
+        img.addEventListener('mouseleave', endPress);
+
+        // תמיכה בסיסית גם במסך מגע
+        img.addEventListener('touchstart', function () {
+            startPress();
+        });
+        img.addEventListener('touchend', endPress);
+        img.addEventListener('touchcancel', endPress);
+    });
+
     const form = document.getElementById('report-form');
     if (!form) return;
 
@@ -516,6 +549,15 @@ function toggleExplanation() {
     color: var(--rojo);
     transform: scale(1.2) rotate(90deg);
     text-shadow: 0 0 10px var(--rojo);
+}
+
+/* Zoom effect on answer images (long press) */
+.answer-btn img {
+    transition: transform 0.2s ease;
+}
+
+.answer-btn img.answer-zoomed {
+    transform: scale(1.15);
 }
 
 @@keyframes fadeIn {
