@@ -140,6 +140,7 @@
 
 <script>
 let updateInterval;
+let answerZoomFromLongPress = false;
 
 async function fetchStats() {
     try {
@@ -236,6 +237,7 @@ function closeImageModal() {
     if (modal) {
         modal.style.display = 'none';
     }
+    answerZoomFromLongPress = false;
 }
 document.addEventListener('DOMContentLoaded', function () {
     // attach click-outside-to-close for image modal
@@ -253,48 +255,46 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!img) return;
 
         let pressTimer = null;
-        let longPressTriggered = false;
 
         function startPress(event) {
+            // רק כפתור שמאלי בעכבר
             if (event && event.type === 'mousedown' && event.button !== 0) {
                 return;
             }
 
+            // זום רק אחרי לחיצה ארוכה (~250ms)
             if (pressTimer !== null) return;
             pressTimer = setTimeout(function () {
-                longPressTriggered = true;
+                answerZoomFromLongPress = true;
                 openAnswerZoom(img.src);
-            }, 250);
+            }, 250); // זמן לחיצה ארוכה לפני זום (במילישניות)
         }
 
-        function endPress() {
+        function cancelPress() {
             if (pressTimer !== null) {
                 clearTimeout(pressTimer);
                 pressTimer = null;
             }
-            if (longPressTriggered) {
-                closeImageModal();
-                longPressTriggered = false;
-            }
         }
 
         btn.addEventListener('mousedown', startPress);
-        btn.addEventListener('mouseup', endPress);
-        btn.addEventListener('mouseleave', endPress);
+        btn.addEventListener('mouseup', cancelPress);
+        btn.addEventListener('mouseleave', cancelPress);
 
         // תמיכה במסכי מגע
         btn.addEventListener('touchstart', function (e) {
             startPress(e);
         });
-        btn.addEventListener('touchend', endPress);
-        btn.addEventListener('touchcancel', endPress);
+        btn.addEventListener('touchend', cancelPress);
+        btn.addEventListener('touchcancel', cancelPress);
 
         // מניעת שליחת תשובה במקרה של לחיצה ארוכה (רק זום)
         btn.addEventListener('click', function (e) {
-            if (longPressTriggered) {
+            if (answerZoomFromLongPress) {
                 e.preventDefault();
                 e.stopPropagation();
-                longPressTriggered = false;
+                // לא סוגרים כאן את המודאל – המשתמש יסגור עם X / לחיצה בחוץ
+                answerZoomFromLongPress = false;
             }
         });
     });
