@@ -221,6 +221,16 @@ function openImageModal() {
         modal.style.display = 'flex';
     }
 }
+function openAnswerZoom(src) {
+    var modal = document.getElementById('image-modal');
+    var modalImg = document.getElementById('modal-img');
+    if (modalImg) {
+        modalImg.src = src;
+    }
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
 function closeImageModal() {
     var modal = document.getElementById('image-modal');
     if (modal) {
@@ -237,20 +247,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Long-press zoom on answer images
+    // Long-press zoom on answer images (modal over all answers)
     const answerButtons = document.querySelectorAll('.answer-btn');
     answerButtons.forEach(function (btn) {
         const img = btn.querySelector('img');
         if (!img) return;
 
         let pressTimer = null;
+        let longPressTriggered = false;
 
         function startPress() {
-            // זום רק אחרי לחיצה ארוכה (בערך רבע שנייה)
+            // זום רק אחרי לחיצה ארוכה (חצי שנייה בערך)
             if (pressTimer !== null) return;
             pressTimer = setTimeout(function () {
-                img.classList.add('answer-zoomed');
-            }, 250); // זמן לחיצה ארוכה לפני זום (במילישניות)
+                longPressTriggered = true;
+                openAnswerZoom(img.src);
+            }, 500); // זמן לחיצה ארוכה לפני זום (במילישניות)
         }
 
         function endPress() {
@@ -258,19 +270,31 @@ document.addEventListener('DOMContentLoaded', function () {
                 clearTimeout(pressTimer);
                 pressTimer = null;
             }
-            img.classList.remove('answer-zoomed');
+            if (longPressTriggered) {
+                // סגירת הזום כשמשחררים אחרי לחיצה ארוכה
+                closeImageModal();
+            }
         }
 
         btn.addEventListener('mousedown', startPress);
         btn.addEventListener('mouseup', endPress);
         btn.addEventListener('mouseleave', endPress);
 
-        // תמיכה בסיסית גם במסך מגע
+        // תמיכה במסכי מגע
         btn.addEventListener('touchstart', function () {
             startPress();
         });
         btn.addEventListener('touchend', endPress);
         btn.addEventListener('touchcancel', endPress);
+
+        // מניעת שליחת תשובה במקרה של לחיצה ארוכה (רק זום)
+        btn.addEventListener('click', function (e) {
+            if (longPressTriggered) {
+                e.preventDefault();
+                e.stopPropagation();
+                longPressTriggered = false;
+            }
+        });
     });
 
     const form = document.getElementById('report-form');
