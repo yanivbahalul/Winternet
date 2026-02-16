@@ -237,7 +237,6 @@ function closeImageModal() {
         modal.style.display = 'none';
     }
 }
-// דווח על טעות בשאלה
 document.addEventListener('DOMContentLoaded', function () {
     // attach click-outside-to-close for image modal
     var modal = document.getElementById('image-modal');
@@ -256,13 +255,16 @@ document.addEventListener('DOMContentLoaded', function () {
         let pressTimer = null;
         let longPressTriggered = false;
 
-        function startPress() {
-            // זום רק אחרי לחיצה ארוכה (חצי שנייה בערך)
+        function startPress(event) {
+            if (event && event.type === 'mousedown' && event.button !== 0) {
+                return;
+            }
+
             if (pressTimer !== null) return;
             pressTimer = setTimeout(function () {
                 longPressTriggered = true;
                 openAnswerZoom(img.src);
-            }, 500); // זמן לחיצה ארוכה לפני זום (במילישניות)
+            }, 250);
         }
 
         function endPress() {
@@ -271,8 +273,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 pressTimer = null;
             }
             if (longPressTriggered) {
-                // סגירת הזום כשמשחררים אחרי לחיצה ארוכה
                 closeImageModal();
+                longPressTriggered = false;
             }
         }
 
@@ -281,8 +283,8 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('mouseleave', endPress);
 
         // תמיכה במסכי מגע
-        btn.addEventListener('touchstart', function () {
-            startPress();
+        btn.addEventListener('touchstart', function (e) {
+            startPress(e);
         });
         btn.addEventListener('touchend', endPress);
         btn.addEventListener('touchcancel', endPress);
