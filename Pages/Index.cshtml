@@ -238,16 +238,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Long-press zoom on answer images
-    const answerImages = document.querySelectorAll('.answer-btn img');
-    answerImages.forEach(function (img) {
+    const answerButtons = document.querySelectorAll('.answer-btn');
+    answerButtons.forEach(function (btn) {
+        const img = btn.querySelector('img');
+        if (!img) return;
+
         let pressTimer = null;
 
         function startPress() {
-            // זום רק אחרי לחיצה ארוכה (חצי שנייה)
+            // זום רק אחרי לחיצה ארוכה (בערך רבע שנייה)
             if (pressTimer !== null) return;
             pressTimer = setTimeout(function () {
                 img.classList.add('answer-zoomed');
-            }, 500); // זמן לחיצה ארוכה לפני זום (במילישניות)
+            }, 250); // זמן לחיצה ארוכה לפני זום (במילישניות)
         }
 
         function endPress() {
@@ -258,16 +261,16 @@ document.addEventListener('DOMContentLoaded', function () {
             img.classList.remove('answer-zoomed');
         }
 
-        img.addEventListener('mousedown', startPress);
-        img.addEventListener('mouseup', endPress);
-        img.addEventListener('mouseleave', endPress);
+        btn.addEventListener('mousedown', startPress);
+        btn.addEventListener('mouseup', endPress);
+        btn.addEventListener('mouseleave', endPress);
 
         // תמיכה בסיסית גם במסך מגע
-        img.addEventListener('touchstart', function () {
+        btn.addEventListener('touchstart', function () {
             startPress();
         });
-        img.addEventListener('touchend', endPress);
-        img.addEventListener('touchcancel', endPress);
+        btn.addEventListener('touchend', endPress);
+        btn.addEventListener('touchcancel', endPress);
     });
 
     const form = document.getElementById('report-form');
