@@ -18,9 +18,9 @@ namespace HelloWorldWeb.Services
         {
             Console.WriteLine("[EmailService] Initializing EmailService (Brevo)...");
 
-            _emailTo = Environment.GetEnvironmentVariable("EMAIL_TO") ?? configuration["Email:To"];
-            _emailFrom = Environment.GetEnvironmentVariable("EMAIL_FROM") ?? configuration["Email:From"];
-            _brevoApiKey = Environment.GetEnvironmentVariable("BREVO_API_KEY");
+            _emailTo = (Environment.GetEnvironmentVariable("EMAIL_TO") ?? configuration["Email:To"])?.Trim();
+            _emailFrom = (Environment.GetEnvironmentVariable("EMAIL_FROM") ?? configuration["Email:From"])?.Trim();
+            _brevoApiKey = Environment.GetEnvironmentVariable("BREVO_API_KEY")?.Trim();
 
             IsConfigured = !string.IsNullOrWhiteSpace(_brevoApiKey)
                            && !string.IsNullOrWhiteSpace(_emailFrom)

@@ -40,7 +40,12 @@
 
 <!-- תוכן ראשי -->
 <div class="quiz-container">
-    <img src="@(string.IsNullOrEmpty(Model.QuestionImageUrl) ? "/" + Model.QuestionImage : Model.QuestionImageUrl)" alt="שאלה" loading="lazy" />
+    <img src="@(string.IsNullOrEmpty(Model.QuestionImageUrl) ? "/" + Model.QuestionImage : Model.QuestionImageUrl)"
+         alt="שאלה"
+         loading="lazy"
+         id="main-question-image"
+         style="cursor: pointer; border: 2px solid var(--space-cadet); box-shadow: 0 0 20px rgba(193, 73, 83, 0.2);"
+         onclick="openImageModal()" />
 
     <form method="post">
         @Html.AntiForgeryToken()
@@ -116,6 +121,12 @@
             <button type="submit" class="next-question-btn" style="font-size: 20px; padding: 12px 32px;">דווח על טעות בשאלה</button>
         </form>
     </div>
+    </div>
+
+    @* Image Modal for enlarging question *@
+    <div id="image-modal" class="image-modal" style="display:none;">
+        <span class="close-modal" onclick="closeImageModal()">&times;</span>
+        <img class="modal-content" id="modal-img" src="@(string.IsNullOrEmpty(Model.QuestionImageUrl) ? "/" + Model.QuestionImage : Model.QuestionImageUrl)" alt="שאלה מוגדלת" />
     </div>
 
 <div id="stats-panel" class="hidden">
@@ -198,8 +209,34 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+// Image modal logic
+function openImageModal() {
+    var modal = document.getElementById('image-modal');
+    var modalImg = document.getElementById('modal-img');
+    var mainImg = document.getElementById('main-question-image');
+    if (mainImg && modalImg) {
+        modalImg.src = mainImg.src;
+    }
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+function closeImageModal() {
+    var modal = document.getElementById('image-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
 // דווח על טעות בשאלה
 document.addEventListener('DOMContentLoaded', function () {
+    // attach click-outside-to-close for image modal
+    var modal = document.getElementById('image-modal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeImageModal();
+        });
+    }
+
     const form = document.getElementById('report-form');
     if (!form) return;
 
@@ -328,6 +365,51 @@ function toggleExplanation() {
 </div>
 
 <style>
+/* Image Modal Styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 5000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(11, 0, 20, 0.95);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+.image-modal[style*="display: flex"] {
+    display: flex !important;
+}
+.modal-content {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(193, 73, 83, 0.5);
+    background: rgba(11, 0, 20, 0.9);
+    padding: 8px;
+    object-fit: contain;
+    border: 2px solid var(--bittersweet-shimmer);
+}
+.close-modal {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: var(--rojo);
+    font-size: 48px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 5100;
+    text-shadow: 0 0 10px var(--rojo);
+    transition: color 0.2s;
+}
+.close-modal:hover {
+    color: var(--isabelline);
+    text-shadow: 0 0 20px var(--rojo);
+}
+
 /* Difficulty Modal Styles - WinterNET Theme */
 .difficulty-modal {
     display: none;
