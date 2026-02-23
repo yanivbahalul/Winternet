@@ -369,7 +369,6 @@ app.MapGet("/api/upload-images", async context =>
 });
 
 
-// 🧹 ניקוי קבצי סטטיסטיקה ישנים
 var progressDir = Path.Combine(Directory.GetCurrentDirectory(), "progress");
 if (Directory.Exists(progressDir))
 {
@@ -392,7 +391,6 @@ if (Directory.Exists(progressDir))
     }
 }
 
-// ✅ Render: הגדרת פורט מהסביבה
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://*:{port}");
 
