@@ -1,9 +1,9 @@
 [
   {
-    "Username": "yaniv",
+    "Username": "tester",
     "Password": "123456",
-    "CorrectAnswers": 2,
-    "TotalAnswered": 2,
+    "CorrectAnswers": 20,
+    "TotalAnswered": 20,
     "IsCheater": false,
     "IsBanned": false,
     "LastSeen": "2025-10-27T14:52:04.598519Z"
